@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>finfanworld | Сервер Minecraft</title>
+    <style>
+        /* Общие стили и сброс настроек */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0d0e12;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Шапка сайта (Header) */
+        header {
+            background: rgba(18, 20, 26, 0.8);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: #00ffcc;
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-menu li {
+            margin-left: 25px;
+        }
+
+        .nav-menu a {
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: #00ffcc;
+        }
+
+        /* Главный баннер (Hero Section) */
+        .hero {
+            padding: 160px 0 60px 0;
+            text-align: center;
+            background: radial-gradient(circle at center, rgba(0, 255, 204, 0.05) 0%, rgba(13, 14, 18, 0) 70%);
+        }
+
+        .hero h1 {
+            font-size: 52px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .hero h1 span {
+            color: #00ffcc;
+            text-shadow: 0 0 20px rgba(0, 255, 204, 0.4);
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #94a3b8;
+            max-width: 600px;
+            margin: 0 auto 30px auto;
+        }
+
+        /* Кнопка IP адреса */
+        .ip-box {
+            display: inline-flex;
+            align-items: center;
+            background: #181b23;
+            border: 2px solid #00ffcc;
+            border-radius: 8px;
+            padding: 12px 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.1);
+        }
+
+        .ip-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.25);
+        }
+
+        .ip-text {
+            font-weight: 700;
+            font-size: 18px;
+            color: #fff;
+            margin-right: 15px;
+        }
+
+        .ip-btn {
+            background: #00ffcc;
+            color: #0d0e12;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        /* Переключатель вкладок (Tabs) */
+        .tabs-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            gap: 15px;
+        }
+
+        .tab-btn {
+            background: #181b23;
+            color: #94a3b8;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: #00ffcc;
+            color: #0d0e12;
+            border-color: #00ffcc;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
+        }
+
+        /* Секция правил */
+        section {
+            padding: 40px 0 80px 0;
+        }
+
+        .rules-content {
+            display: none;
+        }
+
+        .rules-content.active {
+            display: block;
+        }
+
+        /* Стиль для блоков правил */
+        .rule-card {
+            background: #12141a;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 4px solid #00ffcc;
+        }
+
+        .rule-card h3 {
+            color: #fff;
+            font-size: 22px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 10px;
+        }
+
+        .rule-sub-item {
+            margin-bottom: 12px;
+            padding-left: 10px;
+        }
+
+        .rule-sub-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .rule-num {
+            color: #00ffcc;
+            font-weight: 700;
+            margin-right: 5px;
+        }
+
+        .punishment {
+            color: #ff5555;
+            font-weight: 600;
+            margin-left: 5px;
+        }
+
+        /* Специфичные списки модов */
+        .mods-list {
+            list-style: none;
+            margin: 10px 0 10px 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 5px;
+        }
+
+        .mods-list li {
+            color: #cbd5e1;
+            font-size: 14px;
+        }
+        
+        .mods-list li::before {
+            content: "• ";
+            color: #ff5555;
+        }
+
+        /* Кодовое слово */
+        .code-word-box {
+            background: linear-gradient(135deg, #1e1b4b 0%, #12141a 100%);
+            border: 2px dashed #00ffcc;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .code-word-box h4 {
+            font-size: 20px;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .code-word {
+            display: inline-block;
+            font-size: 32px;
+            font-weight: 900;
+            color: #00ffcc;
+            letter-spacing: 5px;
+            text-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
+            margin-top: 10px;
+        }
+
+        /* Подвал (Footer) */
+        footer {
+            background: #090a0d;
+            padding: 40px 0;
+            text-align: center;
+            color: #64748b;
+            font-size: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu { display: none; }
+            .hero h1 { font-size: 36px; }
+            .hero p { font-size: 16px; }
+            .tab-btn { padding: 10px 20px; font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Шапка -->
+    <header>
+        <div class="container nav-container">
+            <a href="#" class="logo">FINFANWORLD</a>
+            <ul class="nav-menu">
+                <li><a href="#rules-section">Правила</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Главный блок -->
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1>Сервер <span>finfanworld</span></h1>
+                <p>Добро пожаловать в мир захватывающих приключений, отзывчивой администрации и стабильного онлайна. Начни играть прямо сейчас!</p>
+                
+                <!-- Кнопка с IP -->
+                <div class="ip-box" onclick="copyIP()">
+                    <span class="ip-text" id="server-ip">mc.ffmine.ru</span>
+                    <span class="ip-btn" id="copy-btn">Копировать</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Раздел правил и вкладок -->
+        <section id="rules-section" class="container">
+            
+            <!-- Переключалка вкладок -->
+            <div class="tabs-container">
+                <button class="tab-btn active" onclick="switchTab('short-rules')">Коротко о главном</button>
+                <button class="tab-btn" onclick="switchTab('full-rules')">Полные правила</button>
+            </div>
+
+            <!-- ВКЛАДКА 1: КОРOTКИЕ ПРАВИЛА -->
+            <div id="short-rules" class="rules-content active">
+                <div class="rule-card">
+                    <h3>Самое главное для комфортной игры</h3>
+                    <div class="rule-sub-item"><span class="rule-num">1.</span> Уважайте других: запрещены жесткие оскорбления, флуд, капс и реклама в чате.</div>
+                    <div class="rule-sub-item"><span class="rule-num">2.</span> Читы под строгим запретом: использование любого софта или запрещенных модов карается баном. Также запрещено играть с читерами в одной команде!</div>
+                    <div class="rule-sub-item"><span class="rule-num">3.</span> Безопасность: не передавайте и не продавайте свои аккаунты. Храните чеки от доната — без них техподдержка не сможет восстановить аккаунт при взломе.</div>
+                    <div class="rule-sub-item"><span class="rule-num">4.</span> Честная игра: запрещено вредить серверу, создавать лаг-машины, использовать баги или дюпать ресурсы.</div>
+                    <div class="rule-sub-item"><span class="rule-num">5.</span> Проверки: администрация имеет право вызвать вас на проверку через AnyDesk. Отказ или неадекватное поведение на проверке ведут к блокировке.</div>
+                </div>
+            </div>
+
+            <!-- ВКЛАДКА 2: ПОЛНЫЕ ПРАВИЛА (ВЕСЬ ВАШ ТЕКСТ) -->
+            <div id="full-rules" class="rules-content">
+                
+                <!-- Раздел 1 -->
+                <div class="rule-card">
+                    <h3>1. Общие положения</h3>
+                    <div class="rule-sub-item"><span class="rule-num">1.1</span> Данный свод правил составлен представителем проекта FinfanWorld и действителен на всех игровых режимах проекта FinfanWorld. Незнание правил не освобождает нарушителя от ответственности, а также может усугубить наказание.</div>
+                    <div class="rule-sub-item"><span class="rule-num">1.4</span> Решения и действия главной администрации (YoutuberFinFan , MrFinFan01) не обсуждаются и не поддаются разжалованию. Главная администрация вправе выдавать наказания вне рамок данных правил.</div>
+                    <div class="rule-sub-item"><span class="rule-num">1.5</span> Администрация сервера не выдаёт игровые ресурсы/компенсации за их потерю в результате кика сервера, лагов/багов, а также действия игроков, использующие запрещённое ПО (читы).</div>
+                    <div class="rule-sub-item"><span class="rule-num">1.6</span> Продажа, взломы, попытки взломов, передачи аккаунтов, покупки аккаунтов в обход официального сайта, распространение данных игроков, вред серверу, а так же продажи\покупки чего либо за реальную валюту - строго запрещены. <span class="punishment">[Наказание: отключение всех аккаунтов без возможности приобрести разбан]</span>. Ответственность несет владелец аккаунта.</div>
+                </div>
+
+                <!-- Раздел 2 -->
+                <div class="rule-card">
+                    <h3>2. Правила регистрации</h3>
+                    <div class="rule-sub-item"><span class="rule-num">2.1</span> Никнейм пользователя должен быть корректным. <span class="punishment">[Блокировка аккаунта; для сменённых — предупреждение, затем блокировка]</span>. Запрещено:
+                        <div style="padding-left: 20px; font-size: 14px; color: #94a3b8; margin-top: 5px;">
+                            • 2.1.1 Никнейм, похожий на никнейм высшей Администрации.<br>
+                            • 2.1.3 Никнейм, оскорбляющий никнейм другого игрока.<br>
+                            • 2.1.4 Никнейм, содержащий названия запрещенных ПО (пример: Celestial777).<br>
+                            • 2.1.5 Никнейм, содержащий грубые матерные слова.
+                        </div>
+                    </div>
+                    <div class="rule-sub-item"><span class="rule-num">2.2</span> При покупке платных дополнительных возможностей (групп), кейсов, рилликов, предоставленный системой чек необходимо сохранить.</div>
+                    <div class="rule-sub-item"><span class="rule-num">2.3</span> При утере/взломе аккаунта, необходимо обратиться к техподдержке в ТГ: <strong>@finfan23</strong>. Без электронного чека в восстановлении будет отказано. Без привязки безопасность аккаунта не гарантируется.</div>
+                </div>
+
+                <!-- Раздел 3 -->
+                <div class="rule-card">
+                    <h3>3. Приобретение платных услуг</h3>
+                    <div class="rule-sub-item"><span class="rule-num">3.1</span> Игра на проекте не подразумевает платы за использование ресурсов FinfanWorld.</div>
+                    <div class="rule-sub-item"><span class="rule-num">3.2</span> Игрок вправе добровольно оплатить определённую сумму проекту за внутриигровую услугу в одностороннем порядке.</div>
+                    <div class="rule-sub-item"><span class="rule-num">3.3</span> При ошибке платежа необходимо обращаться в техподдержку при наличии чека.</div>
+                    <div class="rule-sub-item"><span class="rule-num">3.4</span> Возврата средств за покупки нет, так как все покупки являются добровольными пожертвованиями на развитие сервера.</div>
+                    <div class="rule-sub-item"><span class="rule-num">3.6</span> Покупка платных групп не даёт привилегии на игнорирование/нарушение данных правил.</div>
+                </div>
+
+                <!-- Раздел 4 -->
+                <div class="rule-card">
+                    <h3>4. Внутриигровое общение</h3>
+                    <div class="rule-sub-item"><span class="rule-num">4.1</span> Запрещено флудить (более 3 одинаковых сообщений за минуту). <span class="punishment">[Мут на 1 час]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">4.1.1</span> Использование твинков или сговор для обхода флуда. <span class="punishment">[Мут участникам на 2 часа]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">4.1.2</span> Флуд через /bc объявлений. <span class="punishment">[Мут на 3 часа]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">4.2</span> Флуд символами (более 25 знаков). <span class="punishment">[Мут на 1 час]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">4.2.1</span> Злоупотребление капсом (более 50% капса в предложении от 3 слов). <span class="punishment">[Мут на 3 часа]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">4.3</span> Организация флуд-опросов ("+ в чат"). Исключения: торговля, поиск клана/дуэли. <span class="punishment">[Мут на 3 часа]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">4.4</span> Неадекватное поведение, оскорбления и агрессия. <span class="punishment">[Мут от 3 до 12 часов]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">4.4.2 (а)</span> Оскорбления, унижения, угрозы, затрагивание расы. <span class="punishment">[Мут на 8 часов]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">4.4.2 (б)</span> Злоупотребление матом. <span class="punishment">[Мут на 1-2 часа]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">4.4.2 (в)</span> Аморальное поведение (18+ темы). <span class="punishment">[Мут на 4 часа]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">4.4.2 (г)</span> Призывы к суициду. <span class="punishment">[Мут на 24 часа]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">4.4 (д)</span> Оскорбление проекта. <span class="punishment">[Мут на 12 часов]</span>; Публичная критика проекта. <span class="punishment">[Мут на 3 дня]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">4.5 / 4.5.1</span> Выпрашивание ресурсов или снятия наказаний у персонала. <span class="punishment">[Мут на 30 мин / 1 час]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">4.6</span> Дезинформация игроков. <span class="punishment">[Мут от 12 часов до 4 дней]</span>; Вне-игровой обман (Alt+F4, F3+C). <span class="punishment">[Мут на 5 часов]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">4.7</span> Упоминание/реклама сторонних ресурсов/соцсетей. <span class="punishment">[Мут от 3 до 60 дней]</span>; Вредоносные ссылки. <span class="punishment">[Бан на 32 дня]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">4.8</span> Оскорбление или упоминание родителей. <span class="punishment">[Мут от 9 дней до 25 дней]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">4.9</span> Политика и агитация. <span class="punishment">[Бан 3-7 дней или Мут 2 дня]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">4.10 / 4.10.1</span> Выдача себя за админа <span class="punishment">[Бан 3 дня]</span>; Угрозы баном/мутом <span class="punishment">[Бан 12 часов]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">4.11</span> Оскорбление администрации. <span class="punishment">[Бан 5-15 дней]</span>; Родных администрации <span class="punishment">[Бан 9123 дней]</span>; Шутки в сторону персонала <span class="punishment">[Мут 50 сек]</span>; Неуважительное общение <span class="punishment">[Мут 12 часов]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">4.12</span> Оскорбление ютуберов. <span class="punishment">[Бан 1-5 дней]</span>; Рофлы в их сторону <span class="punishment">[Бан 1 день]</span>; Неадекватное общение <span class="punishment">[Мут 6 часов]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">4.13</span> Пропаганда нацизма, расизма, наркотиков, оружия. <span class="punishment">[Бан на 14 дней]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">4.13 (б)</span> Бартер между другими играми. <span class="punishment">[Бан на 4 дня]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">4.14</span> Доксинг, сватинг, слив личных данных игроков. <span class="punishment">[Бан 30 дней / Отключение аккаунта]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">4.15</span> Провокация игроков на нарушение правил. <span class="punishment">[Бан от 12 часов до 4 дней]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">4.16</span> Упоминание сделок за реальную валюту. <span class="punishment">[Мут на 2 дня]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">4.17</span> Посторонние звуки/музыка в голосовой чат. <span class="punishment">[Мут на 1 час]</span></div>
+                </div>
+
+                <!-- Раздел 5 -->
+                <div class="rule-card">
+                    <h3>5. Запрещенное ПО и читы</h3>
+                    <div class="rule-sub-item"><span class="rule-num">5.2</span> Использование читов и софта. <span class="punishment">[Бан на 1 день]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">5.2.1</span> Тим/совместная игра с читером. <span class="punishment">[Бан на 12 часов]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">5.2.2 / 5.2.3</span> Признание на проверке <span class="punishment">[Бан 14 часов]</span>; Признание в чате <span class="punishment">[Бан 10 часов]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">5.2.4</span> Обход бана (вход с твинков). <span class="punishment">[Бан на 7 дней]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">5.2.5 / 5.2.5.1</span> Читы удалены менее 14 дней назад <span class="punishment">[Бан 5 часов]</span>; Хранение читов <span class="punishment">[Бан 5 days]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">5.2.6 / 5.2.7</span> Авто-копатели, боты автоматизации, бот казино. <span class="punishment">[Бан 4-5 дней]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">5.2.8</span> Неадекватное поведение/шутки на проверке. <span class="punishment">[Бан на 1 день]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">5.2.9</span> Юз виртуальных машин, ограничение доступа админу при проверке. <span class="punishment">[Бан на 5 дней]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">5.2.10</span> Макросы, кликеры (кроме фармилок). <span class="punishment">[Бан 3-7 дней]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">5.2.11 / 5.2.11.1</span> Использование или хранение .bat батников на очистку истории. <span class="punishment">[Бан 1 день / Мут 12 часов]</span></div>
+                    
+                    <p style="margin-top: 15px; color: #fff; font-weight: bold;">Запрещенные модификации (1 день бана):</p>
+                    <ul class="mods-list">
+                        <li>ElytraSwap</li><li>ArmorHotSwap</li><li>Slippery Mod</li><li>StepUp Mod</li>
+                        <li>AFK-Fish Mod</li><li>InvMove</li><li>Inventory Totem</li><li>TopkaAutoBuy v1, v2</li>
+                        <li>GoProne</li><li>CleanCut</li><li>Grass Bypass</li><li>TopkaCasino</li>
+                        <li>Моды на хитбоксы предметов</li><li>Aim Assistance</li><li>Auto Look</li>
+                        <li>Zergatul.cheatutils</li><li>DiamondSim</li><li>X-ray Mod</li><li>Chest Locator</li>
+                        <li>ChestESP</li><li>Entity/Player X-Ray</li><li>Spawner Locator</li><li>AutoAttack</li>
+                        <li>InventoryProfilesNext</li><li>Baritone/Fabritone</li><li>NoClipFlyMod</li>
+                        <li>FreeCam</li><li>PlayerHighlighter</li><li>ClickCrystal</li><li>AutoClicky</li>
+                    </ul>
+                </div>
+
+                <!-- Раздел 6 -->
+                <div class="rule-card">
+                    <h3>6. Игровой процесс и прочее</h3>
+                    <div class="rule-sub-item"><span class="rule-num">6.1.1</span> Создание заливов и багоюз. <span class="punishment">[Бан на 2 дня]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">6.1.2</span> Создание лаг-машин (вред работе сервера). <span class="punishment">[Бан навсегда]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">6.1.4</span> Использование и распространение дюпов. <span class="punishment">[Отключение аккаунта]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">6.1.5</span> Помеха работе персонала ("по рофлу написал спек"). <span class="punishment">[Бан на 1 час]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">6.2</span> Флуд командами (например, /pay более 24 раз). <span class="punishment">[Кик, далее бан на 12 часов]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">6.3</span> Запрещенный текст на табличках, регионах, книгах. <span class="punishment">[Бан от 1 до 3 дней]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">6.4 / 6.4.1</span> Жалобы на высшую администрацию с оскорблениями. <span class="punishment">[Бан на 1 - 5 дней]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">6.5</span> Реклама, продажа, обмен ресурсов за реал, пиар чит-шопов и ДС каналов. <span class="punishment">[Перманентный бан]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">6.6</span> Нарушающие правила названия кланов. <span class="punishment">[Удаление клана, бан основателя на 1-3 дня]</span></div>
+                </div>
+
+                <!-- Раздел 7 -->
+                <div class="rule-card">
+                    <h3>7. Права модерации на проверке</h3>
+                    <div class="rule-sub-item"><span class="rule-num">7.1 / 7.1.1</span> Вызов на проверку возможен через AnyDesk, Discord, TG, VK. Модератор запрашивает только доступ к мышке и клавиатуре (не полный доступ).</div>
+                    <div class="rule-sub-item"><span class="rule-num">7.2</span> Проверка только на ПК. Модератор не имеет права кидать файлы. Все программы качаются игроком самостоятельно.</div>
+                    <div class="rule-sub-item"><strong>Обязательный софт:</strong> SystemInformer, Everything, RecentFilesView, ShellbagAnalyzer, RegScanner, JournalTrace.</div>
+                    <div class="rule-sub-item"><span class="rule-num">7.3</span> Модераторы класса Moder+ имеют право проверить ваш FunPay на предмет продажи ресурсов.</div>
+                </div>
+
+                <!-- Раздел 8 -->
+                <div class="rule-card">
+                    <h3>8. Правила для донатеров</h3>
+                    <div class="rule-sub-item"><span class="rule-num">8.1</span> Использование /bc не по назначению. <span class="punishment">[Бан от 1 до 4 дней]</span></div>
+                    <div class="rule-sub-item"><span class="rule-num">8.2</span> Кастомный префикс должен быть адекватным. Запрещено копировать префиксы персонала (Helper, Moder, Admin). В случае отказа префикса возвращается 80% стоимости.</div>
+                </div>
+
+                <!-- Кодовое слово -->
+                <div class="code-word-box">
+                    <h4>Кодовое слово для подачи заявок в состав проекта:</h4>
+                    <span class="code-word">2312</span>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- Подвал -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 finfanworld. Все права защищены. Мы никак не связаны с Mojang AB.</p>
+        </div>
+    </footer>
+
+    <!-- Скрипты управления сайтом -->
+    <script>
+        // Функция для копирования IP
+        function copyIP() {
+            const ipText = document.getElementById('server-ip').innerText;
+            navigator.clipboard.writeText(ipText).then(() => {
+                const btn = document.getElementById('copy-btn');
+                btn.innerText = 'Скопировано!';
+                btn.style.background = '#ffffff';
+                
+                setTimeout(() => {
+                    btn.innerText = 'Копировать';
+                    btn.style.background = '#00ffcc';
+                }, 2000);
+            }).catch(err => {
+                console.error('Ошибка копирования: ', err);
+            });
+        }
+
+        // Функция переключения вкладок
+        function switchTab(tabId) {
+            // Прячем все вкладки
+            const contents = document.querySelectorAll('.rules-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            // Убираем активный класс у кнопок
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // Показываем нужную вкладку и делаем кнопку активной
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+    </script>
+</body>
+</html>
